@@ -1,4 +1,4 @@
-function createElement(tag, props, ...children) {
+export default function createElement(tag, props, ...children) {
     const element = document.createElement(tag);
 
     if (props) {

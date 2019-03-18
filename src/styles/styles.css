@@ -17,11 +17,11 @@ td:hover {
     background-color: #fafafa;
     cursor: pointer;
 }
-
-input + #root {
+/* 
+input ~ #root {
     display: none;
 }
 
-input:focus + #root {
+input:focus ~ #root {
     display: block;
-}
+} */

@@ -13,5 +13,5 @@ const calendar = new Calendar();
 const view = new CalendarView(
     calendar,
     document.querySelector('#root'),
-    ({year, month, day}) => input.value = `${year}.${month}.${day}`
+    ({year, month, day}) => input.value = `${year}.${month + 1}.${day}`
 );

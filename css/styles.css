@@ -1,0 +1,27 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    max-width: 640px;
+}
+
+td:hover {
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+input + #root {
+    display: none;
+}
+
+input:focus + #root {
+    display: block;
+}

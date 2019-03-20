@@ -29,20 +29,6 @@ export default class Calendar {
         'Декабрь'
     ];
 
-    static YEAR = [
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020
-    ];
-
     static WEEKDAY_NAMES = [
         'Пн',
         'Вт',
@@ -84,6 +70,21 @@ export default class Calendar {
     };
 
     static DAYS_IN_WEEK = 7;
+
+    static YEAR = null;
+
+    constructor() {
+        this.setYearList();
+    }
+
+    setYearList(startingPoint) {
+        const currentYear = startingPoint || this.currentYear;
+        Calendar.YEAR = [];
+        
+        for (let year = currentYear - 50; year < currentYear + 50; year++) {
+            Calendar.YEAR.push(year);
+        }
+    }
 
     static isLeepYear(year) {
         return !((year % 4) || (!(year % 100) && (year % 400)));

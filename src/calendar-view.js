@@ -214,7 +214,7 @@ export default class CalendarView {
     renderTableHead() {
         return (
             $('thead', null,
-                Calendar.WEEKDAY_NAMES.map(({ name, title }) => $('th', { title }, name))
+                Calendar.WEEKDAY_NAMES.map(({ name, title }) => $('th', { title, className: 'text-center' }, name))
             )
         );
     }

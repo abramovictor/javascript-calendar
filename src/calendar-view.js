@@ -90,10 +90,7 @@ export default class CalendarView {
     }
 
     changeSelectDay(selectDay) {
-        this.tableBody.querySelectorAll('td').forEach(day => {
-            day.className = '';
-        });
-
+        this.tableBody.querySelectorAll('td').forEach(day => day.className = '');
         selectDay.className = 'has-background-primary has-text-white';
     }
 
@@ -117,11 +114,10 @@ export default class CalendarView {
     renderMonthSelect() {
         const selectedMonth = this.selectedMonth !== null ? this.selectedMonth : this.data.currentMonth
         return (
-            $('select', {
-                    onchange: this.handleMonthSelectChange
-                },
+            $('select', { onchange: this.handleMonthSelectChange },
                 Calendar.MONTH_NAMES.map((name, index) =>
-                    $('option', {
+                    $('option',
+                        {
                             value: index,
                             selected: index === selectedMonth
                         },
@@ -135,11 +131,10 @@ export default class CalendarView {
     renderYearSelect() {
         const selecterYear = this.selectedYear !== null ? this.selectedYear : this.data.currentYear;
         return (
-            $('select', {
-                    onchange: this.handleYearSelectChange
-                },
+            $('select', { onchange: this.handleYearSelectChange },
                 Calendar.YEAR.map((year) =>
-                    $('option', {
+                    $('option',
+                        {
                             value: year,
                             selected: year === selecterYear
                         },
@@ -152,7 +147,8 @@ export default class CalendarView {
 
     renderPrevMonthButton() {
         return (
-            $('button', {
+            $('button',
+                {
                     className: 'button',
                     onclick: this.handlePrevMonthButtonClick
                 },
@@ -163,7 +159,8 @@ export default class CalendarView {
 
     renderNextMonthButton() {
         return (
-            $('button', {
+            $('button',
+                {
                     className: 'button',
                     onclick: this.handleNextMonthButtonClick
                 },
@@ -175,9 +172,7 @@ export default class CalendarView {
     renderTableHead() {
         return (
             $('thead', null,
-                Calendar.WEEKDAY_NAMES.map(weekday =>
-                    $('th', null, weekday)
-                )
+                Calendar.WEEKDAY_NAMES.map(weekday => $('th', null, weekday))
             )
         );
     }
@@ -190,13 +185,14 @@ export default class CalendarView {
                 month.map(week =>
                     $('tr', null,
                         week.map((date) =>
-                            $('td', {
+                            $('td',
+                                {
                                     className: date.isToday && 'has-background-primary has-text-white',
                                     style: date.isToday && 'border: 2px solid #00d1b2',
-                                    onclick: (date.day > 0) ? ({ target }) => {
-                                            this.handleDayClick(target);
-                                            this.onDateSelect(date);
-                                        } : null
+                                    onclick: (date.day > 0) && (({ target }) => {
+                                        this.handleDayClick(target);
+                                        this.onDateSelect(date);
+                                    })
                                 },
                                 (date.day > 0) ? date.day : ''
                             )
@@ -209,9 +205,7 @@ export default class CalendarView {
 
     renderTable() {
         return (
-            $('table', {
-                    className: 'table is-bordered'
-                },
+            $('table', { className: 'table is-bordered' },
                 this.tableHead,
                 this.tableBody
             )
@@ -220,18 +214,25 @@ export default class CalendarView {
 
     renderCalendar() {
         return (
-            $('div', {
+            $('div',
+                {
                     id: 'calendar',
                     className: 'box'
                 },
                 $('header', null,
                     this.prevMonthButton,
-                    $('div', {
-                        className: 'select'
-                    }, this.monthSelect),
-                    $('div', {
-                        className: 'select'
-                    }, this.yearSelect),
+                    $('div',
+                        {
+                            className: 'select'
+                        },
+                        this.monthSelect
+                    ),
+                    $('div',
+                        {
+                            className: 'select'
+                        },
+                        this.yearSelect
+                    ),
                     this.nextMonthButton
                 ),
                 this.table

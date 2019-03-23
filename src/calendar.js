@@ -1,6 +1,7 @@
 export default class Calendar {
 
     today = new Date();
+    years = null;
 
     get currentYear() {
         return this.today.getFullYear();
@@ -92,22 +93,7 @@ export default class Calendar {
 
     static DAYS_IN_WEEK = 7;
 
-    static YEAR = null;
-
     static WEEK_OF_MONTH = 6;
-
-    constructor() {
-        this.setYearList();
-    }
-
-    setYearList(startingPoint) {
-        const currentYear = startingPoint || this.currentYear;
-        Calendar.YEAR = [];
-
-        for (let year = currentYear - 50; year < currentYear + 50; year++) {
-            Calendar.YEAR.push(year);
-        }
-    }
 
     static isLeepYear(year) {
         return !((year % 4) || (!(year % 100) && (year % 400)));
@@ -130,6 +116,31 @@ export default class Calendar {
 
     static getWeekOfMonth(daysInMonth, monthStartsOn) {
         return Math.ceil((daysInMonth + monthStartsOn) / Calendar.DAYS_IN_WEEK);
+    }
+    
+    static isEqualDate(date1, date2) {
+        try {
+            if (date1.year !== date2.year) return false;
+            if (date1.month !== date2.month) return false;
+            if (date1.day !== date2.day) return false;
+
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    constructor() {
+        this.setYearList();
+    }
+
+    setYearList(startingPoint) {
+        const currentYear = startingPoint || this.currentYear;
+        this.years = [];
+
+        for (let year = currentYear - 50; year < currentYear + 50; year++) {
+            this.years.push(year);
+        }
     }
 
     isToday(year, month, day) {

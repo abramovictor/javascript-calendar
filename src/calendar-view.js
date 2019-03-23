@@ -16,7 +16,7 @@ export default class CalendarView {
     onDateSelect = null;
     todayButton = null
     selectDayButton = null;
-    selectDayData = null;
+    #selectDayData = null;
 
     static NEXT_MONTH = 1;
     static PREV_MONTH = -1;
@@ -63,6 +63,19 @@ export default class CalendarView {
         } catch {
             return this.data.currentMonth;
         }
+    }
+
+    set selectDayData(value) {
+        this.#selectDayData = value;
+    }
+
+    get selectDayData() {
+        const data = this.#selectDayData;
+        if (data) {
+            data.isSelected = true;
+        }
+
+        return data || {};
     }
 
     handleMonthSelectChange() {
@@ -130,8 +143,6 @@ export default class CalendarView {
         }
 
         this.selectDayData = dayData;
-
-        
     }
 
     renderMonthSelect() {
@@ -161,7 +172,7 @@ export default class CalendarView {
                     className: 'btn btn-dark border-light',
                     onchange: this.handleYearSelectChange
                 },
-                Calendar.YEAR.map((year) =>
+                this.data.years.map((year) =>
                     $('option',
                         {
                             value: year,
@@ -210,18 +221,22 @@ export default class CalendarView {
 
     renderTableBody() {
         const month = this.data.getMonthData(this.selectedYear, this.selectedMonth);
-
         return (
             $('tbody', null,
                 month.map(week =>
                     $('tr', null,
                         week.map((date) => {
+                            const isSelectDate = Calendar.isEqualDate(
+                                date,
+                                this.selectDayData
+                            );
+
                             return (
                                 $('td', { className: 'p-1' },
                                     date.isToday ?
                                         (this.todayButton = $('button',
                                             {
-                                                className: 'rounded-0 w-100 h-100 btn btn-light border-light',
+                                                className: `rounded-0 w-100 h-100 btn border-light btn-${!this.selectDayData.isSelected ? 'light' : 'dark'}`,
                                                 onclick: ({ target }) => {
                                                     this.handleDayClick(target);
                                                     this.onDateSelect(date);
@@ -231,7 +246,7 @@ export default class CalendarView {
                                         )) :
                                         $('button',
                                             {
-                                                className: `rounded-0 w-100 h-100 btn btn-dark${!date.isCurrentMonthDay ? ' text-muted' : ''}`,
+                                                className: `rounded-0 w-100 h-100 btn btn-${isSelectDate ? 'light' : 'dark'}${!date.isCurrentMonthDay ? ' text-muted' : ''}`,
                                                 onclick: ({ target }) => {
                                                     this.handleDayClick(target, date);
                                                     this.onDateSelect(date);

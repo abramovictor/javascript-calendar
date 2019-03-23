@@ -10,18 +10,5 @@ body {
 table {
     table-layout: fixed;
     width: 100%;
-    max-width: 640px;
+    max-width: 540px;
 }
-
-td:hover {
-    background-color: #fafafa;
-    cursor: pointer;
-}
-/* 
-input ~ #root {
-    display: none;
-}
-
-input:focus ~ #root {
-    display: block;
-} */

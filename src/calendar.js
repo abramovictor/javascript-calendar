@@ -30,13 +30,34 @@ export default class Calendar {
     ];
 
     static WEEKDAY_NAMES = [
-        'Пн',
-        'Вт',
-        'Ср',
-        'Чт',
-        'Пт',
-        'Сб',
-        'Вс'
+        {
+            name: 'Пн',
+            title: 'Понедельник'
+        },
+        {
+            name: 'Вт',
+            title: 'Вторник'
+        },
+        {
+            name: 'Ср',
+            title: 'Среда'
+        },
+        {
+            name: 'Чт',
+            title: 'Четверг'
+        },
+        {
+            name: 'Пт',
+            title: 'Пятница'
+        },
+        {
+            name: 'Сб',
+            title: 'Суббота'
+        },
+        {
+            name: 'Вс',
+            title: 'Воскресенье'
+        },
     ];
 
     static DAYS_IN_MONTH = [
@@ -73,6 +94,8 @@ export default class Calendar {
 
     static YEAR = null;
 
+    static WEEK_OF_MONTH = 6;
+
     constructor() {
         this.setYearList();
     }
@@ -80,7 +103,7 @@ export default class Calendar {
     setYearList(startingPoint) {
         const currentYear = startingPoint || this.currentYear;
         Calendar.YEAR = [];
-        
+
         for (let year = currentYear - 50; year < currentYear + 50; year++) {
             Calendar.YEAR.push(year);
         }
@@ -100,9 +123,9 @@ export default class Calendar {
         return Calendar.DAYS_IN_MONTH[month];
     }
 
-    static getDaysOfWeek(year, month, day) {
-        let daysOfWeek = new Date(year, month, day).getDay();
-        return daysOfWeek === 0 ? 6 : (daysOfWeek - 1);
+    static getDayOfWeek(year, month, day) {
+        let dayOfWeek = new Date(year, month, day).getDay();
+        return dayOfWeek === 0 ? 6 : (dayOfWeek - 1);
     }
 
     static getWeekOfMonth(daysInMonth, monthStartsOn) {
@@ -118,30 +141,67 @@ export default class Calendar {
     }
 
     getMonthData(year, month) {
-        const daysInMonth = Calendar.getDaysInMonth(year, month);
-        const monthStartsOn = Calendar.getDaysOfWeek(year, month, 1);
+        const daysInCurrentMonth = Calendar.getDaysInMonth(year, month);
+        const currentMonthStartsOn = Calendar.getDayOfWeek(year, month, 1);
+
+        let prevMonth = month - 1;
+        let prevMonthYear = year;
+
+        if (prevMonth < Calendar.MONTHS.JAN) {
+            prevMonth = Calendar.MONTHS.DEC;
+            prevMonthYear = year - 1;
+        }
+
+        let nextMonth = month + 1;
+        let nextMonthYear = year;
+
+        if (nextMonth > Calendar.MONTHS.DEC) {
+            nextMonth = Calendar.MONTHS.JAN;
+            nextMonthYear = year + 1;
+        }
+
+        const daysInPrevMonth = Calendar.getDaysInMonth(prevMonthYear, prevMonth);
 
         const data = [];
-        const weekOfMonth = Calendar.getWeekOfMonth(daysInMonth, monthStartsOn);
 
-        let day = 1;
+        let currentMonthDay = 1;
+        let prevMonthDay = daysInPrevMonth - currentMonthStartsOn + 1;
+        let nextMonthDay = 1;
 
-        for (let i = 0; i < weekOfMonth; i++) {
+        for (let i = 0; i < Calendar.WEEK_OF_MONTH; i++) {
             data[i] = [];
 
             for (let j = 0; j < Calendar.DAYS_IN_WEEK; j++) {
-                if (i === 0 && j < monthStartsOn || day > daysInMonth) {
-                    data[i][j] = 0;
+                if (i === 0 && j < currentMonthStartsOn) {
+                    data[i][j] = {
+                        year: prevMonthYear,
+                        month: prevMonth,
+                        day: prevMonthDay,
+                        isToday: false,
+                        isCurrentMonthDay: false
+                    };
+                    prevMonthDay += 1;
+                }
+                else if (currentMonthDay > daysInCurrentMonth) {
+                    data[i][j] = {
+                        year: nextMonthYear,
+                        month: nextMonth,
+                        day: nextMonthDay,
+                        isToday: false,
+                        isCurrentMonthDay: false
+                    };
+                    nextMonthDay += 1;
                 }
                 else {
                     data[i][j] = {
-                        year,
-                        month,
-                        day,
-                        isToday: this.isToday(year, month, day)
+                        year: year,
+                        month: month,
+                        day: currentMonthDay,
+                        isToday: this.isToday(year, month, currentMonthDay),
+                        isCurrentMonthDay: true
                     };
 
-                    day += 1;
+                    currentMonthDay += 1;
                 }
             }
         }

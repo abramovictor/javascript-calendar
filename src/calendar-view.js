@@ -244,16 +244,27 @@ export default class CalendarView {
                                             },
                                             date.day
                                         )) :
-                                        $('button',
-                                            {
-                                                className: `rounded-0 w-100 h-100 btn btn-${isSelectDate ? 'light' : 'dark'}${!date.isCurrentMonthDay ? ' text-muted' : ''}`,
-                                                onclick: ({ target }) => {
-                                                    this.handleDayClick(target, date);
-                                                    this.onDateSelect(date);
-                                                }
-                                            },
-                                            date.day
-                                        )
+                                        isSelectDate ?
+                                            (this.selectDayButton = $('button',
+                                                {
+                                                    className: `rounded-0 w-100 h-100 btn btn-light${!date.isCurrentMonthDay ? ' text-muted' : ''}`,
+                                                    onclick: ({ target }) => {
+                                                        this.handleDayClick(target, date);
+                                                        this.onDateSelect(date);
+                                                    }
+                                                },
+                                                date.day
+                                            )) :
+                                            $('button',
+                                                {
+                                                    className: `rounded-0 w-100 h-100 btn btn-dark${!date.isCurrentMonthDay ? ' text-muted' : ''}`,
+                                                    onclick: ({ target }) => {
+                                                        this.handleDayClick(target, date);
+                                                        this.onDateSelect(date);
+                                                    }
+                                                },
+                                                date.day
+                                            )
                                 )
                             );
                         })
